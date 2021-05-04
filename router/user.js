@@ -4,6 +4,25 @@ import { User, schema } from '../models/user.js';
 import _ from 'lodash';
 import bcrypt from 'bcrypt';
 
+router.get('/:id', async (req, res) => {
+  try {
+    let users = await User.findOne({
+      _id: req.params.id,
+      isAdmin: true,
+    }).count();
+    if (users < 1) return res.status(401).send('You are not authorised');
+    const skip = (req.body.pageNo - 1) * req.body.itemCount;
+    users = await User.find()
+      .select({ password: 0, __v: 0 })
+      .limit(req.body.itemCount)
+      .skip(skip);
+
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
 router.get('/me', async (req, res) => {
   try {
     const user = await User.findById(req.body.id).select({
@@ -20,12 +39,11 @@ router.get('/me', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const data = await schema.validateAsync(req.body);
-    console.log(data, 'ddddddddddd');
+    await schema.validateAsync(req.body);
     let user = await User.findOne({
       email: req.body.email,
-    });
-    if (user) return res.status(400).send('User already registered');
+    }).count();
+    if (user > 0) return res.status(400).send('User already registered');
 
     user = new User(
       _.pick(req.body, [

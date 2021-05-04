@@ -8,14 +8,14 @@ export const userSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 50,
     required: true,
-    lowercase: true,
+    uppercase: true,
   },
   lastName: {
     type: String,
     minlength: 3,
     maxlength: 50,
     required: true,
-    lowercase: true,
+    uppercase: true,
   },
   country: {
     type: String,

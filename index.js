@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import express from 'express';
 import user from './router/user.js';
+import auth from './router/auth.js';
+import category from './router/category.js';
 
 const app = express();
 app.use(express.json());
@@ -18,6 +20,8 @@ mongoose
   });
 
 app.use('/api/user', user);
+app.use('/api/auth', auth);
+app.use('/api/category', category);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`listening on port ${port}`));
