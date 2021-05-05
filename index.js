@@ -4,8 +4,12 @@ import user from './router/user.js';
 import auth from './router/auth.js';
 import category from './router/category.js';
 
+import cors from 'cors';
+
 const app = express();
 app.use(express.json());
+app.use(cors());
+
 
 const uri =
   'mongodb+srv://onto:DLS3IOdyPGt904SL@upperadviser.grrkc.mongodb.net/upperadviser?retryWrites=true&w=majority';
@@ -23,5 +27,5 @@ app.use('/api/user', user);
 app.use('/api/auth', auth);
 app.use('/api/category', category);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`listening on port ${port}`));
